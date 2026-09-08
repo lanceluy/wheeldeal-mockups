@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: var(--blue); text-decoration: none; } a:hover { color: var(--orange); }
+    .screen {
+      --bg: oklch(0.985 0.004 95); --surface: oklch(1 0 0); --surface-2: oklch(0.965 0.006 95);
+      --line: oklch(0.90 0.008 95); --ink: oklch(0.19 0.012 260); --ink-soft: oklch(0.48 0.014 260);
+      --ink-faint: oklch(0.64 0.012 260); --dark: oklch(0.19 0.02 260); --dark-2: oklch(0.27 0.022 260);
+      --dark-line: oklch(0.34 0.02 260); --orange: oklch(0.68 0.19 45); --orange-ink: oklch(0.32 0.1 45);
+      --orange-soft: oklch(0.95 0.035 55); --blue: oklch(0.6 0.15 250); --blue-ink: oklch(0.32 0.09 250);
+      --blue-soft: oklch(0.94 0.02 250); --font-d: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+      --font-b: 'Manrope', 'Segoe UI', sans-serif;
+      width: 390px; height: 844px; border-radius: 32px; overflow: hidden; position: relative;
+      background: var(--bg); color: var(--ink); font-family: var(--font-b);
+      box-shadow: 0 0 0 1px oklch(0 0 0 / 0.06), 0 20px 40px oklch(0 0 0 / 0.12);
+    }
+    .icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .header { background: var(--dark); padding: 22px 20px 18px; border-radius: 0 0 20px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .icon-btn-dark { width: 36px; height: 36px; border-radius: 999px; background: oklch(1 0 0 / 0.1); border: none; display: flex; align-items: center; justify-content: center; color: oklch(1 0 0); flex-shrink: 0; }
+    .icon-btn-dark .icon { width: 15px; height: 15px; }
+    .header-title { font-family: var(--font-d); font-weight: 700; font-size: 19px; color: oklch(1 0 0); letter-spacing: 0.2px; }
+    .spacer { width: 36px; height: 36px; }
+    .content { padding: 20px 18px 100px; overflow-y: auto; height: 700px; }
+    .group { margin-top: 22px; }
+    .group:first-child { margin-top: 0; }
+    .group-label { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-soft); margin-bottom: 10px; }
+    .photo-row { display: flex; gap: 10px; overflow-x: auto; }
+    .photo-add { flex-shrink: 0; width: 78px; height: 78px; border-radius: 12px; border: 1.5px dashed var(--ink-faint); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--ink-soft); }
+    .photo-add .icon { width: 20px; height: 20px; }
+    .photo-add span { font-size: 10px; font-weight: 700; }
+    .photo-thumb { flex-shrink: 0; width: 78px; height: 78px; border-radius: 12px; position: relative; display: flex; align-items: center; justify-content: center; }
+    .photo-thumb svg { width: 30px; height: 30px; color: oklch(1 0 0 / 0.4); }
+    .photo-thumb .rm { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 999px; background: var(--dark); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px oklch(0 0 0 / 0.25); }
+    .photo-thumb .rm .icon { width: 10px; height: 10px; color: oklch(1 0 0); }
+    .photo-cap { margin-top: 8px; font-size: 11.5px; font-weight: 600; color: var(--ink-faint); }
+    .field { background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; padding: 12px 13px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .field-val { font-size: 13.5px; font-weight: 700; }
+    .field .icon { width: 15px; height: 15px; color: var(--ink-faint); }
+    .fitment-row { display: flex; gap: 8px; }
+    .ff { flex: 1; background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; padding: 10px 10px; display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+    .ff-label { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+    .ff-cap { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-faint); }
+    .ff-val { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+    .ff .icon { width: 14px; height: 14px; color: var(--ink-faint); flex-shrink: 0; }
+    .add-vehicle { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-weight: 700; font-size: 12.5px; color: var(--orange); }
+    .add-vehicle .icon { width: 14px; height: 14px; }
+    .price-field { display: flex; align-items: center; background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; padding: 12px 13px; gap: 4px; }
+    .price-field .sign { font-family: var(--font-d); font-weight: 700; font-size: 20px; color: var(--ink-faint); }
+    .price-field .val { font-family: var(--font-d); font-weight: 700; font-size: 20px; }
+    .segmented { display: flex; background: var(--surface-2); border-radius: 11px; padding: 4px; gap: 4px; }
+    .segment { flex: 1; text-align: center; padding: 9px 0; border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--ink-soft); }
+    .segment.active { background: var(--dark); color: oklch(1 0 0); }
+    .textarea { background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; padding: 12px 13px; font-size: 13px; font-weight: 500; line-height: 1.55; color: var(--ink-soft); min-height: 78px; }
+    .bottom-bar { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 14px 16px 22px; }
+    .cta { display: flex; align-items: center; justify-content: center; background: var(--orange); color: oklch(1 0 0); font-family: var(--font-d); font-weight: 700; font-size: 18px; letter-spacing: 0.3px; border-radius: 12px; padding: 13px; }
+  </style>
+</helmet>
+<div class="screen">
+  <svg class="icon-sprite" aria-hidden="true">
+    <defs>
+      <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.4h3.3L9 6h6l1.7 2.4H20v10.2H4Z"></path><circle cx="12" cy="13.4" r="3.3"></circle></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></symbol>
+      <symbol id="i-wheel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2.3"></circle><line x1="12" y1="4" x2="12" y2="9.4"></line><line x1="12" y1="14.6" x2="12" y2="20"></line><line x1="4" y1="12" x2="9.4" y2="12"></line><line x1="14.6" y1="12" x2="20" y2="12"></line></symbol>
+      <symbol id="i-chev-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"></path></symbol>
+    </defs>
+  </svg>
+
+  <div class="header">
+    <button class="icon-btn-dark"><svg class="icon"><use href="#i-x"></use></svg></button>
+    <div class="header-title">Create Listing</div>
+    <div class="spacer"></div>
+  </div>
+
+  <div class="content">
+    <div class="group">
+      <div class="group-label">Photos</div>
+      <div class="photo-row">
+        <div class="photo-thumb" style="background: linear-gradient(135deg, oklch(0.5 0.09 50), oklch(0.32 0.06 40));"><svg><use href="#i-wheel"></use></svg><div class="rm"><svg class="icon"><use href="#i-x"></use></svg></div></div>
+        <div class="photo-thumb" style="background: linear-gradient(135deg, oklch(0.4 0.04 255), oklch(0.24 0.03 250));"><svg><use href="#i-wheel"></use></svg><div class="rm"><svg class="icon"><use href="#i-x"></use></svg></div></div>
+        <div class="photo-thumb" style="background: linear-gradient(135deg, oklch(0.36 0.03 90), oklch(0.22 0.02 90));"><svg><use href="#i-wheel"></use></svg><div class="rm"><svg class="icon"><use href="#i-x"></use></svg></div></div>
+        <div class="photo-add"><svg class="icon"><use href="#i-camera"></use></svg><span>Add Photo</span></div>
+      </div>
+      <div class="photo-cap">3 of 10 photos added</div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Category</div>
+      <div class="field"><span class="field-val"><svg class="icon" style="display:inline;vertical-align:-3px;margin-right:8px;"><use href="#i-wheel"></use></svg>Wheels &amp; Tires</span><svg class="icon"><use href="#i-chev-down"></use></svg></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Part Number (Optional)</div>
+      <div class="field"><span class="field-val">FL3Z-1007-A</span></div>
+      <div class="photo-cap">Helps buyers confirm exact fitment</div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Compatible Vehicles</div>
+      <div class="fitment-row">
+        <div class="ff"><div class="ff-label"><span class="ff-cap">Year</span><span class="ff-val">2016</span></div><svg class="icon"><use href="#i-chev-down"></use></svg></div>
+        <div class="ff"><div class="ff-label"><span class="ff-cap">Make</span><span class="ff-val">Ford</span></div><svg class="icon"><use href="#i-chev-down"></use></svg></div>
+        <div class="ff"><div class="ff-label"><span class="ff-cap">Model</span><span class="ff-val">F-150</span></div><svg class="icon"><use href="#i-chev-down"></use></svg></div>
+      </div>
+      <div class="add-vehicle"><svg class="icon"><use href="#i-plus"></use></svg>Add another vehicle</div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Title</div>
+      <div class="field"><span class="field-val">18-inch OEM Alloy Wheel Set (4)</span></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Price</div>
+      <div class="price-field"><span class="sign">$</span><span class="val">220</span></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Condition</div>
+      <div class="segmented">
+        <div class="segment active">New</div>
+        <div class="segment">Used</div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Description</div>
+      <div class="textarea">Set of 4 factory alloy wheels off a 2018 F-150 Lariat, 18x8. Minor curb rash on one, otherwise straight and true. No tires included. Bolt pattern 6x135.</div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="cta">Publish Listing</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
